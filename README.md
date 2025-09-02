@@ -27,6 +27,7 @@
 
 ### 1) โคลนโปรเจกต์
 git clone https://github.com/SiXMaRs/PokemonTeam.git
+
 cd PokemonTeam
 
 ### 2) ติดตั้ง dependency
