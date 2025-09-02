@@ -30,13 +30,16 @@ git clone https://github.com/SiXMaRs/PokemonTeam.git
 cd PokemonTeam
 
 ### 2) ติดตั้ง dependency
+
 flutter pub get
 
 ### 3) รันแอป
 -web
+
 flutter run -d "Your browser"
 
 -android emulator
+
 flutter run -d android
 
 ---
