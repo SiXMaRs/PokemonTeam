@@ -1,10 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myapp/pokemon.dart';
 import 'package:myapp/team_controller.dart';
 import 'team_list_page.dart';
 
 class PlayerSelectionPage extends StatelessWidget {
   const PlayerSelectionPage({super.key});
+
+  // -------- NEW: แสดงรายละเอียดโปเกมอน --------
+  void _showPokemonDetail(Pokemon p) {
+    Get.bottomSheet(
+      SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Get.theme.colorScheme.background,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 60,
+                height: 5,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      p.imageUrl,
+                      width: 96,
+                      height: 96,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      p.name,
+                      style: Get.textTheme.titleLarge,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _StatChip(label: 'HP', value: p.hp.toString()),
+                  const SizedBox(width: 8),
+                  _StatChip(label: 'ATK', value: p.attack.toString()),
+                  const SizedBox(width: 8),
+                  _StatChip(label: 'DEF', value: p.defense.toString()),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerRight,
+                child: FilledButton.icon(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.check),
+                  label: const Text('ปิด'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +186,7 @@ class PlayerSelectionPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // Grid รายการโปเกมอน
+              // Grid รายการโปเกมอน (เพิ่มปุ่มดูรายละเอียดบนการ์ด)
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -124,31 +196,64 @@ class PlayerSelectionPage extends StatelessWidget {
                     final index = idx[i];
                     final p = c.pokemons[index];
                     final chosen = c.selected.contains(index);
-                    return GestureDetector(
-                      onTap: () => c.toggle(index),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 160),
-                        decoration: BoxDecoration(
-                          color: chosen ? Colors.green[200] : Colors.white,
-                          border: Border.all(color: chosen ? Colors.green : Colors.grey[300]!, width: 2),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2))],
+
+                    return Stack(
+                      children: [
+                        // แตะการ์ด = เลือก/ยกเลิกเลือก
+                        GestureDetector(
+                          onTap: () => c.toggle(index),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 160),
+                            decoration: BoxDecoration(
+                              color: chosen ? Colors.green[200] : Colors.white,
+                              border: Border.all(color: chosen ? Colors.green : Colors.grey[300]!, width: 2),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2))],
+                            ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.network(
+                                      p.imageUrl,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(p.name, style: const TextStyle(fontSize: 14)),
+                                Text('HP:${p.hp} ATK:${p.attack} DEF:${p.defense}',
+                                    style: TextStyle(fontSize: 12, color: Colors.grey[700])),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.network(p.imageUrl, fit: BoxFit.cover, width: double.infinity),
+
+                        // -------- NEW: ปุ่มดูรายละเอียด (info) มุมขวาบน --------
+                        Positioned(
+                          right: 6,
+                          top: 6,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => _showPokemonDetail(p),
+                              customBorder: const CircleBorder(),
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.9),
+                                  shape: BoxShape.circle,
+                                  boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 3)],
+                                ),
+                                child: const Icon(Icons.info_outline, size: 18),
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(p.name, style: const TextStyle(fontSize: 14)),
-                            Text('HP:${p.hp} ATK:${p.attack} DEF:${p.defense}',
-                                style: TextStyle(fontSize: 12, color: Colors.grey[700])),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     );
                   },
                 ),
@@ -230,6 +335,22 @@ class _EmptySlot extends StatelessWidget {
         const SizedBox(height: 4),
         const Text('ว่าง', style: TextStyle(fontSize: 12, color: Colors.grey)),
       ],
+    );
+  }
+}
+
+// -------- Helper widget สำหรับสเตตัส --------
+class _StatChip extends StatelessWidget {
+  final String label;
+  final String value;
+  const _StatChip({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      label: Text('$label : $value'),
+      avatar: const Icon(Icons.bolt, size: 16),
+      side: BorderSide(color: Colors.grey.shade300),
     );
   }
 }
