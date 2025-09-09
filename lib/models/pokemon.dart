@@ -11,6 +11,7 @@ class Pokemon {
     required this.hp,
     required this.attack,
     required this.defense,
+    
   });
 
   Map<String, dynamic> toJson() => {
@@ -28,4 +29,7 @@ class Pokemon {
         attack: j['attack'],
         defense: j['defense'],
       );
+      
+  int get power => hp + attack + defense;
+
 }

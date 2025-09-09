@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/page/EditTeam.dart';
-import 'package:myapp/pokemon.dart';
+import 'package:myapp/models/pokemon.dart';
 import 'package:myapp/storage_service.dart';
 
 class TeamController extends GetxController {

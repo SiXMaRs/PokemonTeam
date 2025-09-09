@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:myapp/page/home.dart';
-import 'team_controller.dart';
+import 'controllers/team.dart';
 
 class AppBinding extends Bindings {
   @override

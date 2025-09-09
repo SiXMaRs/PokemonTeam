@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/pokemon.dart';
-import 'package:myapp/team_controller.dart';
+import 'package:myapp/models/pokemon.dart';
+import 'package:myapp/controllers/team.dart';
 import 'team_list_page.dart';
 
 class PlayerSelectionPage extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/EditTeam.dart';
 import 'package:myapp/page/playerselection.dart';
-import 'package:myapp/team_controller.dart';
+import 'package:myapp/controllers/team.dart';
 
 class TeamListPage extends StatelessWidget {
   const TeamListPage({super.key});
